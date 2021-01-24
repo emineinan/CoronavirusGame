@@ -1,4 +1,4 @@
-# CoranavirusGame
+# Coranavirus Game
 
 We have created many corona viruses in 3D. When you click on the viruses that rotate around them, the desired or random viruses is cleaned. 
 Number of remaining viruses determines your score.
