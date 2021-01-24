@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <div>
+  <font size="3" face="Tahoma" color="red">SCORE:<span id="score">0</span></font>
+</div>
+</head>
+<body>
+<script src = "THREE.js"></script>
+<script src = "GLTFLoader.js"></script>
+<script src="OrbitControls.js"></script>
+<script src = "OBJLoader.js"></script>
+<script>
+
+	var scene, camera, renderer;
+	var virus, virus2, intersects, mouse, rayCast;
+	const group = new THREE.Group();
+	scene = new THREE.Scene();
+	camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight);
+	camera.position.set(0,100,1000);
+	const array = [];
+	
+	renderer = new THREE.WebGLRenderer();
+	
+	//texture operations
+	const path = "textures/";
+				const format = '.png';
+				const urls = [
+					path + 'px' + format, path + 'nx' + format,
+					path + 'py' + format, path + 'ny' + format,
+					path + 'pz' + format, path + 'nz' + format
+				];
+
+	const textureCube = new THREE.CubeTextureLoader().load( urls );
+	scene.background = textureCube;
+	const material = new THREE.MeshBasicMaterial( { color: 0xffffff, envMap: textureCube } );
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	document.body.appendChild(renderer.domElement);
+	
+	var controls = new THREE.OrbitControls(camera, renderer.domElement);
+	controls.update();
+	
+	 let myrandom = function(x, y) {
+        return x + (y - x) * Math.random();
+    }
+	
+	//light operations
+	
+	hlight = new THREE.AmbientLight (0xffffff,0.8);
+    scene.add(hlight);
+	var abint = new THREE.AmbientLight(0x555500,4);
+	scene.add(abint);
+	 directionalLight = new THREE.DirectionalLight(0xffffff,80);
+        directionalLight.position.set(0,1,0);
+        directionalLight.castShadow = true;
+        scene.add(directionalLight);
+        light = new THREE.PointLight(0xc4c4c4,1);
+        light.position.set(0,300,500);
+        scene.add(light);
+        light2 = new THREE.PointLight(0xc4c4c4,1);
+        light2.position.set(500,100,0);
+        scene.add(light2);
+        light3 = new THREE.PointLight(0xc4c4c4,1);
+        light3.position.set(0,100,-500);
+        scene.add(light3);
+        light4 = new THREE.PointLight(0xc4c4c4,1);
+        light4.position.set(-500,300,500);
+        scene.add(light4);
+	
+	//adding 3D Object from coronavirus file. 
+	let loader = new THREE.GLTFLoader();
+		for(var i = 0; i < 5; i++) {
+		loader.load('coronavirus/scene.gltf', function(gltf){
+		virus = gltf.scene
+		virus.scale.set(0.5, 0.5, 0.5);
+		virus.position.x = myrandom(-300, 300); 
+		virus.position.y = myrandom(-200, 200); 
+		virus.position.z = myrandom(-300, 300); 		
+		array.push(virus);		
+		scene.add(gltf.scene);
+		console.log(array.length);
+		animate();
+});}
+
+
+function loadModel() {
+
+	virus.traverse( function ( child ) {
+	if ( virus.isMesh ) virus.material.map = texture;
+
+	} );
+	scene.add( virus );
+
+}
+
+var manager = new THREE.LoadingManager( loadModel );
+
+	manager.onProgress = function ( item, loaded, total ) {
+};
+	var textureLoader = new THREE.TextureLoader( manager );
+	var texture = textureLoader.load( 'textures/sei.jpg' );
+
+//when mouse clicks on an object, some of them are removed. 	
+let onMouseClick = function(e) {;
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        rayCast.setFromCamera(mouse, camera);
+        intersects = rayCast.intersectObject(scene, true);
+		for(var i = 0; i < intersects.length; i++) {
+				var object = intersects[0].object;
+				if(object.getObjectByName == array[i].getObjectByName) {
+					scene.remove(array[i]);
+					array.pop();
+				
+					console.log("deneme");
+				}
+								
+				document.getElementById("score").textContent = 5 - array.length;
+	
+}  }
+
+function setUpKeyControls() {
+	document.onkeydown = function(e){
+	for(var i = 0; i < array.length; i++) {
+	switch(e.keyCode) {
+		case 37: //sol arrow
+			array[i].position.x -= 0.1;
+			break;	
+		case 38: // up arrow
+			array[i].position.y += 0.1;
+			break;
+		case 39: //right arrow
+			array[i].position.x += 0.1;
+			break;
+		case 40: // down arrow 
+			array[i].position.y -= 0.1;
+			break;
+	
+		}
+	};
+ }
+ 
+ 
+ }
+   function setupKeyLogger() {
+      document.onkeydown = function(e) {
+        console.log(e);
+      }
+    }
+    
+	function animate() {
+		
+		rayCast = new THREE.Raycaster();
+        mouse = new THREE.Vector2();
+        mouse.x = mouse.y = -1;
+		document.addEventListener("click", onMouseClick, false);
+		
+		requestAnimationFrame(animate);	
+		renderer.render(scene, camera);
+		
+		//rotate 3d objects
+		for(var i=0;i<10;i++){
+		array[i].rotation.y += 0.01;
+		}
+	
+	}
+	
+
+	animate();
+
+
+
+
+
+
+</script>
+</body>
+</html>
