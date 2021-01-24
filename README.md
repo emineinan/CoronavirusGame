@@ -9,4 +9,6 @@ Number of remaining viruses determines your score.
 - Three.js
 
 # Developers
-| [Emine İNAN](https://github.com/emineinan) | [İmtisal AKDEDE](https://github.com/akdedeimtisal) | Selinay ALTUN |
+- [Emine İNAN](https://github.com/emineinan) 
+- [İmtisal AKDEDE](https://github.com/akdedeimtisal) 
+- Selinay ALTUN 
