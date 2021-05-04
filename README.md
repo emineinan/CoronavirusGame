@@ -13,4 +13,4 @@ Number of remaining viruses determines your score.
 # Developers
 - [Emine İNAN](https://github.com/emineinan) 
 - [İmtisal AKDEDE](https://github.com/akdedeimtisal) 
-- Selinay ALTUN 
+- [Selinay ALTUN](https://github.com/selinaay)
